@@ -20,13 +20,12 @@ class VideoGraph:
             if len(fields)!=3:
                 continue
             key = fields[1]
-            rel_dict = self.parse_dict(fields[2])
             if fields[0]==u'QQ':
-                self.qq[key] = rel_dict
+                self.qq[key] = self.parse_dict(fields[2])
             elif fields[0]==u'QV':
-                self.qv[key] = rel_dict
-            elif fields[0]==u'VV':
-                self.vv[key] = rel_dict
+                self.qv[key] = self.parse_dict(fields[2])
+            #elif fields[0]==u'VV':
+            #    self.vv[key] = rel_dict
         file.close()
         print 'graph file %s is loaded' %filepath
         print 'VV: %d QQ: %d, QV: %d' %(len(self.vv),len(self.qq),len(self.qv))
