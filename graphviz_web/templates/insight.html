@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div class="queryarea" style="margin-left: 100px; margin-top: 20px">
+    <form action="insight.html">
+        <input class="searchbox" maxlength="2048" name="lquery" title="Search" type="text"/>
+        <input class="searchbox" maxlength="2048" name="rquery" title="Search" type="text"/>
+        <input type="submit" value="Show Connection">
+    </form>
+</div>
+<div class="connections" style="margin-left: 100px; margin-top: 20px">
+    <div class="videoconnection" style="float: left">
+        <ul style="list-style: none">
+            {% for vid in videolist %}
+            <li><a href="http://v.youku.com/v_show/id_{{ vid }}" target="_blank">{{ vid }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="queryconnection" style="float: left; margin-left: 100px">
+        <ul style="list-style: none">
+            {%  for query in querylist %}
+                <li>{{ query }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+</body>
+</html>
