@@ -19,10 +19,8 @@ class VideoGraph:
             fields = line.split('\t')
             if len(fields)!=3:
                 continue
-            print fields[0]
             key = fields[1]
             rel_dict = self.parse_dict(fields[2])
-            print 'result dict len: %d'%len(rel_dict)
             if fields[0]==u'QQ':
                 self.qq[key] = rel_dict
             elif fields[0]==u'QV':
