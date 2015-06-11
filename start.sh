@@ -1,2 +1,2 @@
 rm -f load.finish
-python manage.py runserver
+nohup python manage.py runserver 0.0.0.0:80
