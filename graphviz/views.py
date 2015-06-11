@@ -8,7 +8,7 @@ import manage
 def index(request):
     return HttpResponse(u'Hello World')
 
-def get_video_result(request):
+def query_connection_insight(request):
     key1 = request.GET.get('lquery')
     key2 = request.GET.get('rquery')
     print key1, key2
@@ -23,6 +23,23 @@ def get_video_result(request):
     for res in video_list:
         video_res_list.append(res[0].encode('utf-8'))
     template = get_template('insight.html')
+    html = template.render(Context({'videolist':video_res_list,'querylist':query_res_list}))
+    return HttpResponse(html)
+
+def query_insight(request):
+    key = request.GET.get('query')
+    print key
+    query_list = graphviz_web.settings.graph.get_related_query(key)
+    content = 'Insight<br/>'
+    query_res_list = []
+    for res in query_list:
+        #content += res[0].encode('utf-8')+'<br/>'
+        query_res_list.append(res.encode('utf-8'))
+    video_list = graphviz_web.settings.graph.get_related_video(key)
+    video_res_list = []
+    for res in video_list:
+        video_res_list.append(res.encode('utf-8'))
+    template = get_template('query.html')
     html = template.render(Context({'videolist':video_res_list,'querylist':query_res_list}))
     return HttpResponse(html)
 #    return HttpResponse(content)

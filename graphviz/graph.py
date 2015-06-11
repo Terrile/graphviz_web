@@ -41,6 +41,14 @@ class VideoGraph:
             res_dict[info[0]] = float(info[1])
         return res_dict
 
+    def get_related_video(self,query):
+        res_list = sorted(self.qv[query], key=operator.itemgetter(1), reverse=True)
+        return res_list[:100]
+
+    def get_related_query(self,query):
+        res_list = sorted(self.qq[query], key=operator.itemgetter(1), reverse=True)
+        return res_list[:100]
+
     def get_video_connection(self, key1, key2):
         connection = self.intersect(self.qv[key1],self.qv[key2])
         res_list = sorted(connection.items(), key=operator.itemgetter(1), reverse=True)
