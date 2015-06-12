@@ -3,6 +3,7 @@ __author__ = 'Administrator'
 from collections import defaultdict
 import codecs
 import operator
+from pprint import pprint
 class VideoGraph:
     def __init__(self):
         self.qv = defaultdict(dict)
@@ -27,6 +28,8 @@ class VideoGraph:
             #elif fields[0]==u'VV':
             #    self.vv[key] = rel_dict
         file.close()
+        #pprint(self.qq)
+        #pprint(self.qv)
         print 'graph file %s is loaded' %filepath
         print 'VV: %d QQ: %d, QV: %d' %(len(self.vv),len(self.qq),len(self.qv))
 

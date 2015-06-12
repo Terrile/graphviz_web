@@ -30,6 +30,7 @@ def query_insight(request):
     key = request.GET.get('query')
     print key
     query_list = graphviz_web.settings.graph.get_related_query(key)
+    print len(query_list)
     content = 'Insight<br/>'
     query_res_list = []
     for res in query_list:
