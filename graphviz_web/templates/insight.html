@@ -7,8 +7,8 @@
 <body>
 <div class="queryarea" style="margin-left: 100px; margin-top: 20px">
     <form action="insight.html">
-        <input class="searchbox" maxlength="2048" name="lquery" title="Search" type="text"/>
-        <input class="searchbox" maxlength="2048" name="rquery" title="Search" type="text"/>
+        <input class="searchbox" maxlength="2048" name="lquery" value="{{ lquery }}" title="Search" type="text"/>
+        <input class="searchbox" maxlength="2048" name="rquery" value="{{ rquery }}" title="Search" type="text"/>
         <input type="submit" value="Show Connection">
     </form>
 </div>
@@ -23,7 +23,7 @@
     <div class="queryconnection" style="float: left; margin-left: 100px">
         <ul style="list-style: none">
             {%  for query in querylist %}
-                <li>{{ query }}</li>
+                <li><a href="query.html?query={{ query }}" target="_blank" style="text-decoration: none">{{ query }}</a></li>
             {% endfor %}
         </ul>
     </div>

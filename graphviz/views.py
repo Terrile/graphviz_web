@@ -23,7 +23,7 @@ def query_connection_insight(request):
     for res in video_list:
         video_res_list.append(res[0].encode('utf-8'))
     template = get_template('insight.html')
-    html = template.render(Context({'videolist':video_res_list,'querylist':query_res_list}))
+    html = template.render(Context({'videolist':video_res_list,'querylist':query_res_list, 'lquery':key1,'rquery':key2}))
     return HttpResponse(html)
 
 def query_insight(request):
