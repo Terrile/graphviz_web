@@ -11,7 +11,7 @@ def index(request):
 def query_connection_insight(request):
     key1 = request.GET.get('lquery')
     key2 = request.GET.get('rquery')
-    print key1, key2
+    #print key1, key2
     query_list = graphviz_web.settings.graph.get_query_connection(key1,key2)
     content = 'Insight<br/>'
     query_res_list = []
@@ -28,7 +28,6 @@ def query_connection_insight(request):
 
 def query_insight(request):
     key = request.GET.get('query')
-    print key
     query_list = graphviz_web.settings.graph.get_related_query(key)
     print len(query_list)
     content = 'Insight<br/>'
