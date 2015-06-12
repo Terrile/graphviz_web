@@ -22,7 +22,10 @@
     <div class="queryconnection" style="float: left; margin-left: 100px">
         <ul style="list-style: none">
             {%  for query in querylist %}
-                <li><a href="query.html?query={{ query }}" target="_blank" style="text-decoration: none">{{ query }}</a></li>
+                <li>
+                    <a href="query.html?query={{ query }}" target="_blank" style="text-decoration: none">{{ query }}</a>
+                    <a href="insight.html?lquery={{ srcquery }}&rquery={{ query }}" target="_blank" style="text-decoration: none">   c   </a>
+                </li>
             {% endfor %}
         </ul>
     </div>

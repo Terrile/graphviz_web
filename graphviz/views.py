@@ -40,7 +40,7 @@ def query_insight(request):
     for res in video_list:
         video_res_list.append(res.encode('utf-8'))
     template = get_template('query.html')
-    html = template.render(Context({'videolist':video_res_list,'querylist':query_res_list}))
+    html = template.render(Context({'videolist':video_res_list,'querylist':query_res_list, 'src_query':key.encode('utf-8')}))
     return HttpResponse(html)
 #    return HttpResponse(content)
 
