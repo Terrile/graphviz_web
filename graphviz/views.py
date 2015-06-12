@@ -43,5 +43,5 @@ def query_insight(request):
     html = template.render(Context({'videolist':video_res_list,'querylist':query_res_list, 'src_query':key.encode('utf-8')}))
     return HttpResponse(html)
 #    return HttpResponse(content)
-
+#force push
 # Create your views here.
