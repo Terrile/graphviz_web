@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="no-cache">
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <title></title>
+    <script>
+        var w_width = 1000;//window width
+        var w_height = 800; //window height
+        var count = 0;
+        var pos_x_arr = new Int32Array(1000);
+        var pos_y_arr = new Int32Array(1000);
+        var query_arr = new Array(1000);
+        var cur_query = "{{ init_query }}";
+        var graph_spec="";
+        function transform_x(x)
+        {
+            return (x*0.5+0.55)*w_width;
+        }
+
+        function transform_y(y)
+        {
+            return (-y*0.5+0.55)*w_height;
+        }
+
+        function drawCanvas_bkp() {
+            var circle_canvas = document.getElementById("canvas");
+            var context = circle_canvas.getContext("2d");
+// Fill Style
+            context.fillStyle = "rgba(93,179,199,0.80)";
+// Begin path
+            context.beginPath();
+//Canvas shape
+            context.arc(225,225,115,0,Math.PI*2,true);
+// Close path
+            context.closePath();
+// Fill shape
+            context.fill();
+// Draw Image function
+            /*
+            var img = new Image();
+            img.src = "images/Figure_A.png";
+            img.onload = function() {
+                context.drawImage(img, 145, 145);
+            };*/
+        }
+
+        function load_data()
+        {
+            var fileName = "http://localhost:63343/web_template/data.txt";
+            var txtFile;
+            txtFile = new XMLHttpRequest();
+            txtFile.open("GET",fileName,false);
+            txtFile.send();
+            var txtDoc=txtFile.responseText;
+            return txtDoc;
+        }
+
+        function first_load()
+        {
+            refresh();
+        }
+
+        function refresh()
+        {
+            var canvas = document.getElementById("canvas");
+            var context = canvas.getContext("2d");
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            var request = "http://127.0.0.1:8000/viz?query="+cur_query;
+            var txtFile;
+            txtFile = new XMLHttpRequest();
+            txtFile.open("GET",request,false);
+            txtFile.send();
+            graph_spec=txtFile.responseText;
+            drawCanvas();
+        }
+
+        function drawCanvas() {
+            console.log("DEBUG:");
+            console.log(graph_spec);
+            console.log("END DEBUG");
+            count = 0;
+            draw_graph(graph_spec);
+            /*
+            draw_text(0,0,10,graph_spec);
+            draw_connection(100,100,300,200);
+          //  draw_connection(300,200,200,400);
+            draw_circle(100,100,100);
+            draw_text(75,100,10,"小苹果");
+            draw_circle(300,200,100);
+            draw_circle(200,400,100);
+            */
+        }
+
+        function draw_connection(src_x,src_y,dst_x,dst_y) {
+            var canvas = document.getElementById("canvas");
+            var context = canvas.getContext("2d");
+            //context.beginPath();
+            //context.fillStyle = "rgba(93,179,199,0.50)";
+            context.moveTo(src_x,src_y);
+            context.lineWidth=2;
+
+            //context.lineWidth(10);
+            context.lineTo(dst_x,dst_y);
+            context.strokeStyle = "rgba(93,179,199,0.05)";
+            context.stroke();
+            //context.closePath();
+        }
+
+        function draw_text(x,y,size, text)
+        {
+            var canvas = document.getElementById("canvas");
+            var context = canvas.getContext("2d");
+            context.font="20px Georgia";
+            context.fillStyle="rgba(1,1,1,1.0)";
+            context.fillText(text,x,y);
+        }
+
+        function draw_circle(x,y,size) {
+            var circle_canvas = document.getElementById("canvas");
+            var context = circle_canvas.getContext("2d");
+            context.fillStyle = "rgba(93,179,199,0.80)";
+            // Begin path
+            context.beginPath();
+            context.arc(x,y,size,0,Math.PI*2,true);
+            context.closePath();
+            context.fill();
+        }
+
+        function draw_graph(graph_spec) {
+            var graph = JSON.parse(graph_spec);
+            //draw edges firstly
+
+            for(var i=0; i<graph.edges.length; i++)
+            {
+                var src_idx = graph.edges[i].src_idx;
+                var dst_idx = graph.edges[i].dst_idx;
+
+                var weight = graph.edges[i].weight;
+
+                var src_x = graph.nodes[src_idx].pos_x;
+                var src_y = graph.nodes[src_idx].pos_y;
+                src_x = transform_x(src_x);
+                src_y = transform_y(src_y);
+
+                var dst_x = graph.nodes[dst_idx].pos_x;
+                var dst_y = graph.nodes[dst_idx].pos_y;
+                dst_x = transform_x(dst_x);
+                dst_y = transform_y(dst_y);
+
+                draw_connection(src_x,src_y,dst_x,dst_y);
+            }
+
+            count = 0;
+            //draw nodes
+            for(var i=0; i<graph.nodes.length; i++)
+            {
+                var query = graph.nodes[i].query;
+                var pos_x = graph.nodes[i].pos_x;
+                var pos_y = graph.nodes[i].pos_y;
+                var weight = graph.nodes[i].weight;
+
+                pos_x = transform_x(pos_x);
+                pos_y = transform_y(pos_y);
+                if(count<1000)
+                {
+                    pos_x_arr[count] = pos_x;
+                    pos_y_arr[count] = pos_y;
+                    query_arr[count] = query;
+                    count++;
+                }
+
+                var size = 10;
+                if(i==0)
+                {
+                    size = 20;
+                }
+
+                draw_circle(pos_x,pos_y,size);
+                draw_text(pos_x,pos_y,size,query);
+            }
+
+        }
+
+        function parse_graph(json) {
+            var graph = JSON.parse(json);
+            return graph;
+        }
+
+        function get_clicked_query(x, y)
+        {
+            var i;
+            var min_dist = 1000000000;
+            var argmin_query = '';
+            console.log("query count: "+query_arr.length+" position count: "+pos_x_arr.length+", "+pos_y_arr.length);
+            console.log("Data: "+pos_x_arr[0]+" : "+pos_y_arr[0]+" : "+query_arr[0]);
+            for(i=0; i<count; i++)
+            {
+                var cur_dist = Math.abs(x-pos_x_arr[i])+Math.abs(y-pos_y_arr[i]);
+                if(cur_dist<min_dist)
+                {
+                    argmin_query = query_arr[i];
+                    min_dist = cur_dist;
+                }
+            }
+            if(min_dist<100)
+            {
+                return argmin_query;
+            }
+            else{
+                return "";
+            }
+        }
+
+        function getMousePos(canvas, evt) {
+            var rect = canvas.getBoundingClientRect();
+            return {
+                x: evt.clientX - rect.left,
+                y: evt.clientY - rect.top
+            };
+        }
+
+        function onClickHandler(e)
+        {
+            console.log("Mouse clicked");
+            var canvas = document.getElementById("canvas");
+            var context = canvas.getContext("2d");
+            var pos = getMousePos(canvas, e);
+            posx = pos.x;
+            posy = pos.y;
+            console.log("PosX: "+posx+"  PosY: "+posy);
+            context.fillStyle = "#000000";
+            context.fillRect (posx, posy, 4, 4);
+            var target_query = get_clicked_query(posx,posy);
+            console.log("Clicked Query: "+target_query);
+            cur_query = target_query;
+            if(cur_query!="")
+            {
+                refresh();
+            }
+        }
+
+    </script>
+</head>
+<body onLoad="first_load();">
+<canvas id="canvas" width="1200" height="1000" onclick="onClickHandler(event);">
+    <p>Your Browse Don't Support Current Format</p>
+</canvas>
+</body>
+</html>

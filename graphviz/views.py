@@ -42,6 +42,16 @@ def query_insight(request):
     template = get_template('query.html')
     html = template.render(Context({'videolist':video_res_list,'querylist':query_res_list, 'src_query':key.encode('utf-8')}))
     return HttpResponse(html)
+
+def query_visualize(request):
+    key = request.GET.get('query')
+    html = get_template('visualize.html').render(Context({'init_query':key}))
+    return HttpResponse(html)
+
+def query_viz_resp(request):
+    key = request.GET.get('query')
+    viz_json = graphviz_web.settings.dist_graph.serialize(key)
+    return HttpResponse(viz_json)
 #    return HttpResponse(content)
 #force push
 # Create your views here.

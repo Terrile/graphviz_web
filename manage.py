@@ -8,6 +8,8 @@ if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "graphviz_web.settings")
     if os.path.isfile('load.start'):
         graphviz_web.settings.graph.load('graph.txt')
+        graphviz_web.settings.dist_graph.load_graph('position_graph.txt')
+        graphviz_web.settings.dist_graph.load_query('queryfile.txt')
     else:
         open('load.start','a').close()
 
