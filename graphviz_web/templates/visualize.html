@@ -68,7 +68,8 @@
             var canvas = document.getElementById("canvas");
             var context = canvas.getContext("2d");
             context.clearRect(0, 0, canvas.width, canvas.height);
-            var request = "http://127.0.0.1:8000/viz?query="+cur_query;
+            //var request = "http://127.0.0.1:8000/viz?query="+cur_query;
+            var request = "/viz?query="+cur_query;
             var txtFile;
             txtFile = new XMLHttpRequest();
             txtFile.open("GET",request,false);
